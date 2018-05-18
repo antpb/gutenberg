@@ -525,3 +525,63 @@ export function replaceTag( node, tagName, doc ) {
 
 	return newNode;
 }
+
+/**
+ * Answers whether a node is contained in the specified parent.
+ *
+ * This tests whether one node is contained in another node.
+ * We would prefer to use the native `Node#contains` function,
+ * but IE11's implementation always returns false for text nodes.
+ * This function should work across all supported browsers.
+ *
+ * @param {Node} parent         The parent node.
+ * @param {Node} candidateChild The node to test for containment.
+ *
+ * @return {boolean} Whether the candidate is contained by the parent.
+ */
+export const nodeContains = ( () => {
+	const testParent = document.createElement( 'div' );
+	const testTextChild = document.createTextNode( '' );
+	testParent.appendChild( testTextChild );
+
+	/*
+	 * All our supported browsers include a `Node#contains` function,
+	 * but in IE11 `Node#contains` always returns false for text nodes.
+	 * We test that here in case we need to provide a working implementation.
+	 */
+	return testParent.contains( testTextChild ) ?
+		( parent, candidateChild ) => parent.contains( candidateChild ) :
+		nodeContainsImplementation;
+} )();
+
+/**
+ * Answers whether a node is contained in the specified parent.
+ *
+ * This is an `contains` implementation to use instead of IE11's broken `Node#contains`.
+ * This function is used as needed by the `nodeContains` export but is exposed
+ * here for unit test.
+ *
+ * @param {Node} parent         The parent node.
+ * @param {Node} candidateChild The node to test for containment.
+ *
+ * @return {boolean} Whether the candidate is contained by the parent.
+ *
+ * @private
+ */
+export function nodeContainsImplementation( parent, candidateChild ) {
+	// We can use `Node#contains` in IE11 if the candidate is an element.
+	if ( candidateChild.nodeType === window.Node.ELEMENT_NODE ) {
+		return parent.contains( candidateChild );
+	}
+
+	for (
+		let ancestor = candidateChild.parentNode;
+		ancestor !== null;
+		ancestor = ancestor.parentNode
+	) {
+		if ( ancestor === parent ) {
+			return true;
+		}
+	}
+	return false;
+}

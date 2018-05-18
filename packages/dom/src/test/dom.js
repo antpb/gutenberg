@@ -1,7 +1,13 @@
 /**
  * Internal dependencies
  */
-import { isHorizontalEdge, placeCaretAtHorizontalEdge, isTextField } from '../dom';
+import {
+	isHorizontalEdge,
+	placeCaretAtHorizontalEdge,
+	isTextField,
+	nodeContains,
+	nodeContainsImplementation,
+} from '../dom';
 
 describe( 'DOM', () => {
 	let parent;
@@ -153,4 +159,61 @@ describe( 'DOM', () => {
 			expect( isTextField( document.createElement( 'div' ) ) ).toBe( false );
 		} );
 	} );
+
+	describe( 'nodeContains', createNodeContainsTests( nodeContains ) );
+	describe( 'nodeContainsImplementation', createNodeContainsTests( nodeContainsImplementation ) );
 } );
+
+/**
+ * Creates tests for a nodeContains function matching the signature of our `nodeContains` export.
+ *
+ * @param {Function} nodeContainsFunction The nodeContains implementation to test.
+ *
+ * @return {Function} A function that declares the tests.
+ */
+function createNodeContainsTests( nodeContainsFunction ) {
+	return () => {
+		let parentNode;
+		beforeEach( () => {
+			parentNode = document.createElement( 'div' );
+		} );
+
+		it( 'it returns false when the parent doesn\'t contain the candidate element', () => {
+			const orphanElement = document.createElement( 'p' );
+			expect( nodeContainsFunction( parentNode, orphanElement ) ).toBeFalsy();
+		} );
+
+		it( 'it returns false when the parent doesn\'t contain the candidate text node', () => {
+			const orphanTextNode = document.createTextNode( 'test' );
+			expect( nodeContainsFunction( parentNode, orphanTextNode ) ).toBeFalsy();
+		} );
+
+		it( 'it returns true when the parent contains a candidate element as a child', () => {
+			const childElement = parentNode.appendChild(
+				document.createElement( 'p' )
+			);
+			expect( nodeContainsFunction( parentNode, childElement ) ).toBeTruthy();
+		} );
+
+		it( 'it returns true when the parent contains a candidate text node as a child', () => {
+			const childTextNode = parentNode.appendChild(
+				document.createTextNode( 'test' )
+			);
+			expect( nodeContainsFunction( parentNode, childTextNode ) ).toBeTruthy();
+		} );
+
+		it( 'it returns true when the parent contains an candidate element as a grandchild', () => {
+			const grandchildElement = parentNode
+				.appendChild( document.createElement( 'div' ) )
+				.appendChild( document.createElement( 'p' ) );
+			expect( nodeContainsFunction( parentNode, grandchildElement ) ).toBeTruthy();
+		} );
+
+		it( 'it returns true when the parent contains a candidate text node as a grandchild', () => {
+			const grandchildTextNode = parentNode
+				.appendChild( document.createElement( 'div' ) )
+				.appendChild( document.createTextNode( 'test' ) );
+			expect( nodeContainsFunction( parentNode, grandchildTextNode ) ).toBeTruthy();
+		} );
+	};
+}
