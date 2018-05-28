@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { isEqual, noop, omit } from 'lodash';
+import { noop, omit } from 'lodash';
 
 /**
  * WordPress dependencies
@@ -11,6 +11,7 @@ import {
 	synchronizeBlocksWithTemplate,
 } from '@wordpress/blocks';
 import { withSelect, withDispatch } from '@wordpress/data';
+import isShallowEqual from '@wordpress/is-shallow-equal';
 
 /**
  * Internal dependencies
@@ -23,6 +24,24 @@ import BlockList from '../components/block-list';
  * @type {Object}
  */
 const INNER_BLOCK_LIST_CACHE = {};
+
+const LOCKING_HIERARCHY = {
+	insert: 1,
+	all: 2,
+};
+
+const getHighestLocking = ( locking1, locking2 ) => {
+	if ( ! locking1 ) {
+		return locking2;
+	}
+	if ( ! locking2 ) {
+		return locking1;
+	}
+	if ( LOCKING_HIERARCHY[ locking1 ] > LOCKING_HIERARCHY[ locking2 ] ) {
+		return locking1;
+	}
+	return locking2;
+};
 
 /**
  * Returns a BlockList component which is already pre-bound to render with a
@@ -40,10 +59,19 @@ const INNER_BLOCK_LIST_CACHE = {};
 export function createInnerBlockList( uid, renderBlockMenu = noop ) {
 	if ( ! INNER_BLOCK_LIST_CACHE[ uid ] ) {
 		const InnerBlockListComponent = class extends Component {
-			componentWillReceiveProps( nextProps ) {
-				this.updateNestedSettings( {
-					supportedBlocks: nextProps.allowedBlocks,
-				} );
+			constructor( props ) {
+				super( props );
+				this.state = {};
+			}
+
+			static getDerivedStateFromProps( props ) {
+				const newSettings = {
+					allowedBlocks: props.allowedBlocks,
+					locking: getHighestLocking( props.locking, props.parentLocking ),
+				};
+				if ( ! isShallowEqual( props.blockListSettings, newSettings ) ) {
+					props.updateNestedSettings( newSettings );
+				}
 			}
 
 			componentWillUnmount() {
@@ -56,9 +84,6 @@ export function createInnerBlockList( uid, renderBlockMenu = noop ) {
 
 			componentDidMount() {
 				INNER_BLOCK_LIST_CACHE[ uid ][ 1 ]++;
-				this.updateNestedSettings( {
-					supportedBlocks: this.props.allowedBlocks,
-				} );
 				this.insertTemplateBlocks( this.props.template );
 			}
 
@@ -68,12 +93,6 @@ export function createInnerBlockList( uid, renderBlockMenu = noop ) {
 					// synchronizeBlocksWithTemplate( [], template ) parses the template structure,
 					// and returns/creates the necessary blocks to represent it.
 					insertBlocks( synchronizeBlocksWithTemplate( [], template ) );
-				}
-			}
-
-			updateNestedSettings( newSettings ) {
-				if ( ! isEqual( this.props.blockListSettings, newSettings ) ) {
-					this.props.updateNestedSettings( newSettings );
 				}
 			}
 
@@ -98,10 +117,11 @@ export function createInnerBlockList( uid, renderBlockMenu = noop ) {
 
 		const InnerBlockListComponentContainer = compose(
 			withSelect( ( select ) => {
-				const { getBlock, getBlockListSettings } = select( 'core/editor' );
+				const { getBlock, getBlockListSettings, getBlockRootUID, getLocking } = select( 'core/editor' );
 				return {
 					block: getBlock( uid ),
 					blockListSettings: getBlockListSettings( uid ),
+					parentLocking: getLocking( getBlockRootUID( uid ) ),
 				};
 			} ),
 			withDispatch( ( dispatch ) => {
