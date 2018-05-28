@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { first, last } from 'lodash';
+import { first, last, some } from 'lodash';
 
 /**
  * WordPress dependencies
@@ -98,15 +98,15 @@ export default compose( [
 			getBlockOrder,
 			getMultiSelectedBlockUids,
 			hasMultiSelection,
-			getEditorSettings,
+			getBlockRootUID,
+			getLocking,
 		} = select( 'core/editor' );
-		const { templateLock } = getEditorSettings();
-
+		const multiSelectedBlockUids = getMultiSelectedBlockUids();
 		return {
 			uids: getBlockOrder(),
-			multiSelectedBlockUids: getMultiSelectedBlockUids(),
+			multiSelectedBlockUids,
 			hasMultiSelection: hasMultiSelection(),
-			isLocked: !! templateLock,
+			isLocked: some( multiSelectedBlockUids, ( uid ) => !! getLocking( getBlockRootUID( uid ) ) ),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {

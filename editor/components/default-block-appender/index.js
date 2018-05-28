@@ -62,16 +62,17 @@ export default compose(
 			getBlockCount,
 			getBlock,
 			getEditorSettings,
+			getLocking,
 		} = select( 'core/editor' );
 		const isEmpty = ! getBlockCount( ownProps.rootUID );
 		const lastBlock = getBlock( ownProps.lastBlockUID );
 		const isLastBlockDefault = get( lastBlock, [ 'name' ] ) === getDefaultBlockName();
-		const { templateLock, bodyPlaceholder } = getEditorSettings();
+		const { bodyPlaceholder } = getEditorSettings();
 
 		return {
 			isVisible: isEmpty || ! isLastBlockDefault,
 			showPrompt: isEmpty,
-			isLocked: !! templateLock,
+			isLocked: !! getLocking( ownProps.rootUID ),
 			placeholder: bodyPlaceholder,
 		};
 	} ),

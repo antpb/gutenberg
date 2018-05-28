@@ -620,9 +620,10 @@ const applyWithSelect = withSelect( ( select, { uid, rootUID } ) => {
 		isSelectionEnabled,
 		getSelectedBlocksInitialCaretPosition,
 		getEditorSettings,
+		getLocking,
 	} = select( 'core/editor' );
 	const isSelected = isBlockSelected( uid );
-	const { templateLock, hasFixedToolbar } = getEditorSettings();
+	const { hasFixedToolbar } = getEditorSettings();
 	const block = getBlock( uid );
 	const previousBlockUid = getPreviousBlockUid( uid );
 	const previousBlock = getBlock( previousBlockUid );
@@ -642,7 +643,7 @@ const applyWithSelect = withSelect( ( select, { uid, rootUID } ) => {
 		initialPosition: getSelectedBlocksInitialCaretPosition(),
 		isEmptyDefaultBlock: block && isUnmodifiedDefaultBlock( block ),
 		isPreviousBlockADefaultEmptyBlock: previousBlock && isUnmodifiedDefaultBlock( previousBlock ),
-		isLocked: !! templateLock,
+		isLocked: !! getLocking( rootUID ),
 		previousBlockUid,
 		block,
 		isSelected,

@@ -46,11 +46,10 @@ function InserterWithShortcuts( { items, isLocked, onInsert } ) {
 
 export default compose(
 	withSelect( ( select, { rootUID } ) => {
-		const { getEditorSettings, getInserterItems } = select( 'core/editor' );
-		const { templateLock } = getEditorSettings();
+		const { getInserterItems, getLocking } = select( 'core/editor' );
 		return {
 			items: getInserterItems( rootUID ),
-			isLocked: !! templateLock,
+			isLocked: !! getLocking( rootUID ),
 		};
 	} ),
 	withDispatch( ( dispatch, ownProps ) => {

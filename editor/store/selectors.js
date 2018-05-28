@@ -1230,15 +1230,15 @@ export const canInsertBlockType = createSelector(
 			return false;
 		}
 
-		const { allowedBlockTypes, templateLock } = getEditorSettings( state );
+		const { allowedBlockTypes } = getEditorSettings( state );
 
 		const isBlockAllowedInEditor = checkAllowList( allowedBlockTypes, blockName, true );
 		if ( ! isBlockAllowedInEditor ) {
 			return false;
 		}
 
-		const isEditorLocked = !! templateLock;
-		if ( isEditorLocked ) {
+		const isLocked = !! getLocking( state, parentUID );
+		if ( isLocked ) {
 			return false;
 		}
 

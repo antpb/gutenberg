@@ -137,11 +137,10 @@ export default compose(
 			},
 		};
 	} ),
-	withSelect( ( select ) => {
-		const { templateLock } = select( 'core/editor' ).getEditorSettings();
-
+	withSelect( ( select, { rootUID } ) => {
+		const { getLocking } = select( 'core/editor' );
 		return {
-			isLocked: !! templateLock,
+			isLocked: !! getLocking( rootUID ),
 		};
 	} )
 )( BlockDropZone );
