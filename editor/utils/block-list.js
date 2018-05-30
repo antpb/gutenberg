@@ -25,24 +25,6 @@ import BlockList from '../components/block-list';
  */
 const INNER_BLOCK_LIST_CACHE = {};
 
-const LOCKING_HIERARCHY = {
-	insert: 1,
-	all: 2,
-};
-
-const getHighestLocking = ( locking1, locking2 ) => {
-	if ( ! locking1 ) {
-		return locking2;
-	}
-	if ( ! locking2 ) {
-		return locking1;
-	}
-	if ( LOCKING_HIERARCHY[ locking1 ] > LOCKING_HIERARCHY[ locking2 ] ) {
-		return locking1;
-	}
-	return locking2;
-};
-
 /**
  * Returns a BlockList component which is already pre-bound to render with a
  * given UID as its rootUID prop. It is necessary to cache these components
@@ -67,7 +49,7 @@ export function createInnerBlockList( uid, renderBlockMenu = noop ) {
 			static getDerivedStateFromProps( props ) {
 				const newSettings = {
 					allowedBlocks: props.allowedBlocks,
-					locking: getHighestLocking( props.locking, props.parentLocking ),
+					locking: props.locking === undefined ? props.parentLocking : props.locking,
 				};
 				if ( ! isShallowEqual( props.blockListSettings, newSettings ) ) {
 					props.updateNestedSettings( newSettings );
