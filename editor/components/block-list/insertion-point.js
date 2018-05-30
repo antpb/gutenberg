@@ -78,7 +78,7 @@ export default compose(
 			getBlock,
 			isBlockInsertionPointVisible,
 			isTyping,
-			getLocking,
+			getLockedState,
 		} = select( 'core/editor' );
 		const blockIndex = uid ? getBlockIndex( uid, rootUID ) : -1;
 		const insertIndex = blockIndex;
@@ -92,7 +92,7 @@ export default compose(
 		);
 
 		return {
-			locking: getLocking( insertionPoint.rootUID ),
+			locking: getLockedState( insertionPoint.rootUID ),
 			showInserter: ! isTyping() && canShowInserter,
 			index: insertIndex,
 			showInsertionPoint,

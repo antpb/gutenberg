@@ -38,11 +38,11 @@ export function BlockDuplicateButton( { blocks, onDuplicate, onClick = noop, isL
 
 export default compose(
 	withSelect( ( select, { uids, rootUID } ) => {
-		const { getBlocksByUID, getBlockIndex, getLocking } = select( 'core/editor' );
+		const { getBlocksByUID, getBlockIndex, getLockedState } = select( 'core/editor' );
 		return {
 			blocks: getBlocksByUID( uids ),
 			index: getBlockIndex( last( castArray( uids ) ), rootUID ),
-			isLocked: !! getLocking( rootUID ),
+			isLocked: !! getLockedState( rootUID ),
 		};
 	} ),
 	withDispatch( ( dispatch, { blocks, index, rootUID } ) => ( {

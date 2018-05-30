@@ -1237,7 +1237,7 @@ export const canInsertBlockType = createSelector(
 			return false;
 		}
 
-		const isLocked = !! getLocking( state, parentUID );
+		const isLocked = !! getLockedState( state, parentUID );
 		if ( isLocked ) {
 			return false;
 		}
@@ -1746,14 +1746,14 @@ export function getEditorSettings( state ) {
 }
 
 /*
- * Returns the locking in the context of a given root block.
+ * Returns the locked state in the context of a given root block.
  *
  * @param {Object}  state   Editor state.
  * @param {?string} rootUID Block UID.
  *
- * @return {?string} Locking in the context of a given block.
+ * @return {?string} Locked state in the context of a given block.
  */
-export function getLocking( state, rootUID ) {
+export function getLockedState( state, rootUID ) {
 	if ( ! rootUID ) {
 		return getTemplateLock( state );
 	}

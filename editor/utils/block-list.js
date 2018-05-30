@@ -117,11 +117,11 @@ export function createInnerBlockList( uid, renderBlockMenu = noop ) {
 
 		const InnerBlockListComponentContainer = compose(
 			withSelect( ( select ) => {
-				const { getBlock, getBlockListSettings, getBlockRootUID, getLocking } = select( 'core/editor' );
+				const { getBlock, getBlockListSettings, getBlockRootUID, getLockedState } = select( 'core/editor' );
 				return {
 					block: getBlock( uid ),
 					blockListSettings: getBlockListSettings( uid ),
-					parentLocking: getLocking( getBlockRootUID( uid ) ),
+					parentLocking: getLockedState( getBlockRootUID( uid ) ),
 				};
 			} ),
 			withDispatch( ( dispatch ) => {

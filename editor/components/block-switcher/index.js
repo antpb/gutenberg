@@ -103,10 +103,10 @@ export function BlockSwitcher( { blocks, onTransform, isLocked } ) {
 
 export default compose(
 	withSelect( ( select, ownProps ) => {
-		const { getBlock, getBlockRootUID, getLocking } = select( 'core/editor' );
+		const { getBlock, getBlockRootUID, getLockedState } = select( 'core/editor' );
 		return {
 			blocks: ownProps.uids.map( getBlock ),
-			isLocked: some( castArray( ownProps.uids ), ( uid ) => !! getLocking( getBlockRootUID( uid ) ) ),
+			isLocked: some( castArray( ownProps.uids ), ( uid ) => !! getLockedState( getBlockRootUID( uid ) ) ),
 		};
 	} ),
 	withDispatch( ( dispatch, ownProps ) => ( {

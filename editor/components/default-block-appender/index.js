@@ -62,7 +62,7 @@ export default compose(
 			getBlockCount,
 			getBlock,
 			getEditorSettings,
-			getLocking,
+			getLockedState,
 		} = select( 'core/editor' );
 		const isEmpty = ! getBlockCount( ownProps.rootUID );
 		const lastBlock = getBlock( ownProps.lastBlockUID );
@@ -72,7 +72,7 @@ export default compose(
 		return {
 			isVisible: isEmpty || ! isLastBlockDefault,
 			showPrompt: isEmpty,
-			isLocked: !! getLocking( ownProps.rootUID ),
+			isLocked: !! getLockedState( ownProps.rootUID ),
 			placeholder: bodyPlaceholder,
 		};
 	} ),

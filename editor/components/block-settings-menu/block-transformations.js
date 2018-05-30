@@ -52,9 +52,9 @@ function BlockTransformations( { blocks, small = false, onTransform, onClick = n
 }
 export default compose( [
 	withSelect( ( select, { uids } ) => {
-		const { getBlockRootUID, getBlocksByUID, getLocking } = select( 'core/editor' );
+		const { getBlockRootUID, getBlocksByUID, getLockedState } = select( 'core/editor' );
 		return {
-			isLocked: some( uids, ( uid ) => !! getLocking( getBlockRootUID( uid ) ) ),
+			isLocked: some( uids, ( uid ) => !! getLockedState( getBlockRootUID( uid ) ) ),
 			blocks: getBlocksByUID( uids ),
 		};
 	} ),

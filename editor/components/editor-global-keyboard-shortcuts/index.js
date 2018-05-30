@@ -99,14 +99,14 @@ export default compose( [
 			getMultiSelectedBlockUids,
 			hasMultiSelection,
 			getBlockRootUID,
-			getLocking,
+			getLockedState,
 		} = select( 'core/editor' );
 		const multiSelectedBlockUids = getMultiSelectedBlockUids();
 		return {
 			uids: getBlockOrder(),
 			multiSelectedBlockUids,
 			hasMultiSelection: hasMultiSelection(),
-			isLocked: some( multiSelectedBlockUids, ( uid ) => !! getLocking( getBlockRootUID( uid ) ) ),
+			isLocked: some( multiSelectedBlockUids, ( uid ) => !! getLockedState( getBlockRootUID( uid ) ) ),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {

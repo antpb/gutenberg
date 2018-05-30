@@ -37,10 +37,10 @@ export default compose(
 		},
 	} ) ),
 	withSelect( ( select, { uids } ) => {
-		const { getBlockRootUID, getLocking } = select( 'core/editor' );
+		const { getBlockRootUID, getLockedState } = select( 'core/editor' );
 		return {
 			isLocked: some( castArray( uids ), ( uid ) => {
-				return !! getLocking( getBlockRootUID( uid ) );
+				return !! getLockedState( getBlockRootUID( uid ) );
 			} ),
 		};
 	} ),

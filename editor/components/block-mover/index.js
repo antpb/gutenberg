@@ -107,14 +107,14 @@ export class BlockMover extends Component {
 
 export default compose(
 	withSelect( ( select, { uids, rootUID } ) => {
-		const { getBlock, getBlockIndex, getLocking } = select( 'core/editor' );
+		const { getBlock, getBlockIndex, getLockedState } = select( 'core/editor' );
 		const firstUID = first( castArray( uids ) );
 		const block = getBlock( firstUID );
 
 		return {
 			firstIndex: getBlockIndex( firstUID, rootUID ),
 			blockType: block ? getBlockType( block.name ) : null,
-			isLocked: getLocking( rootUID ) === 'all',
+			isLocked: getLockedState( rootUID ) === 'all',
 		};
 	} ),
 	withDispatch( ( dispatch, { uids, rootUID } ) => {

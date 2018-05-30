@@ -138,9 +138,9 @@ export default compose(
 		};
 	} ),
 	withSelect( ( select, { rootUID } ) => {
-		const { getLocking } = select( 'core/editor' );
+		const { getLockedState } = select( 'core/editor' );
 		return {
-			isLocked: !! getLocking( rootUID ),
+			isLocked: !! getLockedState( rootUID ),
 		};
 	} )
 )( BlockDropZone );
