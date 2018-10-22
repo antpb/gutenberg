@@ -62,6 +62,12 @@ const slimImageObject = ( img ) => {
 	return pick( img, attrSet );
 };
 
+// the Classic Gallery media object contains attributes required for render. These will be used for playlist
+const slimClassicGalleryItemObject = ( classicGalleryMedia ) => {
+	const attributeSet = [ 'id' ];
+	return pick( classicGalleryMedia, attributeSet );
+};
+
 const getAttachmentsCollection = ( ids ) => {
 	return wp.media.query( {
 		order: 'ASC',
@@ -136,7 +142,7 @@ class MediaUpload extends Component {
 	}
 
 	onUpdate( selections ) {
-		const { onSelect, multiple = false } = this.props;
+		const { onSelect, multiple = false, classicGallery } = this.props;
 		const state = this.frame.state();
 		const selectedImages = selections || state.get( 'selection' );
 
@@ -145,7 +151,11 @@ class MediaUpload extends Component {
 		}
 
 		if ( multiple ) {
-			onSelect( selectedImages.models.map( ( model ) => slimImageObject( model.toJSON() ) ) );
+			if ( classicGallery ) {
+				onSelect( selectedImages.models.map( ( model ) => slimClassicGalleryItemObject( model.toJSON() ) ) );
+			} else if ( multiple ) {
+				onSelect( selectedImages.models.map( ( model ) => slimImageObject( model.toJSON() ) ) );
+			}
 		} else {
 			onSelect( slimImageObject( ( selectedImages.models[ 0 ].toJSON() ) ) );
 		}

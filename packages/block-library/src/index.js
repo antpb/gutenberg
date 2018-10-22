@@ -17,6 +17,7 @@ import * as image from './image';
 import * as heading from './heading';
 import * as quote from './quote';
 import * as gallery from './gallery';
+import * as classicGallery from './classic-gallery';
 import * as archives from './archives';
 import * as audio from './audio';
 import * as button from './button';
@@ -67,6 +68,7 @@ export const registerCoreBlocks = () => {
 		audio,
 		button,
 		categories,
+		classicGallery,
 		code,
 		columns,
 		column,
