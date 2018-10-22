@@ -35,7 +35,6 @@ export const settings = {
 		linkTo: {
 			type: 'string',
 		},
-
 	},
 
 	supports: {
