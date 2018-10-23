@@ -20,7 +20,9 @@ function render_block_classic_gallery( $attributes ) {
 	}
 	$html = sprintf( '<figure class="%s">%s</figure>', esc_attr( $classes ), do_shortcode( '[ gallery ids="' . implode( ',', $attributes['ids'] ) . '" ]' ) );
 
-	return $html;
+	$attributes['ids'] = implode( ',', $attributes['ids'] );
+
+	return do_shortcode( '[gallery ids="' . $attributes['ids'] . '"]' );
 }
 
 /**

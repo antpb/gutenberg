@@ -81,7 +81,7 @@ class ClassicGallery extends Component {
 		const { attributes, className, noticeUI } = this.props;
 		const { ids, randomize, columns, size, linkTo } = attributes;
 
-		if ( ! this.props.attributes.ids ) {
+		if ( ! ids ) {
 			return (
 				<Placeholder
 					icon="media-image"
