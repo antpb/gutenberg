@@ -21,10 +21,6 @@ function render_block_classic_gallery( $attributes ) {
 		$attributes['randomize'] = 'menu_order';
 	}
 
-	if ( ! empty( $attributes['align'] ) ) {
-		$classes .= ' align' . $attributes['align'];
-	}
-
 	$html = sprintf( '<figure class="%s">%s</figure>', esc_attr( $classes ), do_shortcode( '[gallery columns="' . $attributes['columns'] . '" link="' . $attributes['linkTo'] . 'size="' . $attributes['size'] . '" ids="' . implode( ',', $attributes['ids'] ) . '" orderby="' . $attributes['randomize'] . '"]' ) );
 
 	return $html;

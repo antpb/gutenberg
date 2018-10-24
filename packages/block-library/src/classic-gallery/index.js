@@ -20,7 +20,6 @@ export const settings = {
 	category: 'common',
 
 	supports: {
-		align: true,
 		html: false,
 	},
 
