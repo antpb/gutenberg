@@ -21,7 +21,7 @@ function render_block_classic_gallery( $attributes ) {
 		$attributes['randomize'] = 'menu_order';
 	}
 
-	$html = sprintf( '<figure class="%s">%s</figure>', esc_attr( $classes ), do_shortcode( '[gallery columns="' . $attributes['columns'] . '" link="' . $attributes['linkTo'] . 'size="' . $attributes['size'] . '" ids="' . implode( ',', $attributes['ids'] ) . '" orderby="' . $attributes['randomize'] . '"]' ) );
+	$html = sprintf( '<figure class="%s">%s</figure>', esc_attr( $classes ), do_shortcode( '[gallery columns="' . $attributes['columns'] . '" link="' . $attributes['linkTo'] . '" size="' . $attributes['size'] . '" ids="' . implode( ',', $attributes['ids'] ) . '" orderby="' . $attributes['randomize'] . '"]' ) );
 
 	return $html;
 }
@@ -47,7 +47,6 @@ function register_block_classic_gallery() {
 				),
 				'columns'             => array(
 					'type'    => 'number',
-					'default' => '3',
 				),
 				'size'             => array(
 					'type'    => 'string',
