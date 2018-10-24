@@ -19,24 +19,6 @@ export const settings = {
 
 	category: 'common',
 
-	attributes: {
-		ids: {
-			type: 'string',
-		},
-		columns: {
-			type: 'number',
-		},
-		randomize: {
-			type: 'boolean',
-		},
-		size: {
-			type: 'string',
-		},
-		linkTo: {
-			type: 'string',
-		},
-	},
-
 	supports: {
 		align: true,
 		html: false,

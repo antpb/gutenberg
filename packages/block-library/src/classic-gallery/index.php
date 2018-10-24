@@ -15,14 +15,19 @@
 function render_block_classic_gallery( $attributes ) {
 	$classes = 'wp-block-classic-gallery';
 
+	if ( $attributes['randomize'] ) {
+		$attributes['randomize'] = 'rand';
+	} else {
+		$attributes['randomize'] = 'menu_order';
+	}
+
 	if ( ! empty( $attributes['align'] ) ) {
 		$classes .= ' align' . $attributes['align'];
 	}
-	$html = sprintf( '<figure class="%s">%s</figure>', esc_attr( $classes ), do_shortcode( '[ gallery ids="' . implode( ',', $attributes['ids'] ) . '" ]' ) );
 
-	$attributes['ids'] = implode( ',', $attributes['ids'] );
+	$html = sprintf( '<figure class="%s">%s</figure>', esc_attr( $classes ), do_shortcode( '[gallery columns="' . $attributes['columns'] . '" link="' . $attributes['linkTo'] . 'size="' . $attributes['size'] . '" ids="' . implode( ',', $attributes['ids'] ) . '" orderby="' . $attributes['randomize'] . '"]' ) );
 
-	return do_shortcode( '[gallery ids="' . $attributes['ids'] . '"]' );
+	return $html;
 }
 
 /**
@@ -33,6 +38,30 @@ function register_block_classic_gallery() {
 		'core/classic-gallery',
 		array(
 			'render_callback' => 'render_block_classic_gallery',
+			'attributes'      => array(
+				'ids'              => array(
+					'type'  => 'array',
+					'items' => array(
+						'type' => 'number',
+					),
+				),
+				'randomize'             => array(
+					'type'    => 'boolean',
+					'default' => 'false',
+				),
+				'columns'             => array(
+					'type'    => 'number',
+					'default' => '3',
+				),
+				'size'             => array(
+					'type'    => 'string',
+					'default' => 'thumbnail',
+				),
+				'linkTo'             => array(
+					'type'    => 'string',
+					'default' => 'file',
+				),
+			),
 		)
 	);
 }

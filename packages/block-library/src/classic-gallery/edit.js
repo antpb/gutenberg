@@ -147,7 +147,7 @@ class ClassicGallery extends Component {
 						<SelectControl
 							label={ __( 'Link To' ) }
 							value={ linkTo }
-							onChange={ this.toggleAttribute( 'style' ) }
+							onChange={ this.toggleAttribute( 'linkTo' ) }
 							options={ [
 								{ value: 'file', label: __( 'Media File' ) },
 								{ value: 'attachementPage', label: __( 'Attachment Page' ) },
@@ -157,7 +157,7 @@ class ClassicGallery extends Component {
 						<SelectControl
 							label={ __( 'Image Sizes' ) }
 							value={ size }
-							onChange={ this.toggleAttribute( 'style' ) }
+							onChange={ this.toggleAttribute( 'size' ) }
 							options={ [
 								{ value: 'thumbnail', label: __( 'Thumbnail' ) },
 								{ value: 'medium', label: __( 'Medium' ) },
